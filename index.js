@@ -87,10 +87,9 @@ function getNodePkgPaths(dir, exclusions) {
   return getAllDirPaths(dir, exclude)([]).filter(isNodePkg);
 }
 
-function getRootPkg(dirpath) {
+function getPkgJson(dirpath) {
   return require(path.resolve(dirpath, 'package.json'));
 }
-
 
 function addPkgRoot(dirpath) {
   return pathTo => path.join(dirpath, pathTo);
@@ -100,10 +99,14 @@ function getAppRoot(alt) {
   return alt || arp.path;
 }
 
+function getLernaPkg(dirpath) {
+  return require(path.resolve(dirpath, 'lerna.json'));
+}
+
 function getLernaPkgPaths(dirpath) {
-  const lernaPkg = require(path.resolve(dirpath, 'lerna.json'));
+  const lernaPkg = getLernaPkg(dirpath);
   if (lernaPkg.useWorkspaces) {
-    const pkgJson = getRootPkg(dirpath);
+    const pkgJson = getPkgJson(dirpath);
 
     return globby.sync(pkgJson.workspaces)
     .filter(dir => isDir(dir) && isNodePkg(dir));
@@ -129,6 +132,10 @@ const mod = {
   isDir,
   isNodePkg,
   isLernaRepo,
+  addPkgRoot,
+  getAppRoot,
+  getPkgJson,
+  getLernaPkg,
   getAllDirPaths,
   getNodePkgPaths,
   getMonorepoPaths,
