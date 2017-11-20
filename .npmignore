@@ -1,0 +1,15 @@
+.git
+*.log
+
+# reporting
+.nyc_output/
+reports/
+coverage/
+metrics.json
+
+# ignore some json files for now
+*-bak*
+output*.json
+node-only*.json
+sorted*.json
+*test.json
